@@ -1,0 +1,58 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+ {% block main %}
+
+<h2>the results of searching basketball courts</h2>
+<p></p>
+
+
+<div style="text-align:left">
+    <ul class="list-group">
+       {% for row in items.rows %}
+            <h4><li>
+            <a href={{row.url}} target="_self">{{row.name}}</a>
+            <span class="info"> &nbsp;points:{{row.points}} &nbsp;comments:{{row.message_numbers}} &nbsp;createTime:{{row.time}}</span>
+            </li></h4>
+        {% endfor %}
+    </ul>
+</div>
+
+<form class="form-group" action="{{ url_for('preupload') }}" method="get">
+  <button class="btn btn-info" type="submit">Upload</button>
+</form>
+
+<div id="map" style="height: 400px;width:40%;align:right;">
+    <script>
+      var map;
+      var row;
+      function initMap() {
+        var data = '{{ items.rows | tojson}}';
+        var rows = JSON.parse(data);
+        map = new google.maps.Map(document.getElementById('map'), {
+          //center: {lat: 32.112124, lng: 118.958864},
+          center: {lat: rows[0]['latitude'], lng: rows[0]['longitude']},
+          zoom: 11
+        });
+
+        var length = rows.length;
+        for(var i = 0; i < length; i++)
+        {
+            var myLatLng = {lat: parseFloat(rows[i]['latitude']), lng: parseFloat(rows[i]['longitude'])};
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: rows[i]['name']
+            });
+        }
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ items.key | urlencode }}&callback=initMap"
+    async defer></script>
+    </div>
+
+{% endblock %}

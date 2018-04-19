@@ -1,0 +1,120 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+ {% block main %}
+
+<form class="form-inline" action="{{ url_for('search') }}" method="post">
+  <input id ="txtPlaces" autofocus class="form-control" name="address" placeholder="search basketball courts" type="text" style="width:300px; height:40px;"/>
+  <input type="hidden" name="viewpoint" id="viewpoint"/>
+
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    <script type="text/javascript">
+            var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
+            console.log(places)
+            google.maps.event.addListener(places, 'place_changed', function () {
+                var place = places.getPlace();
+                var address = place.formatted_address;
+                var name = place.name;
+                var latitude = place.geometry.viewport.f.b;
+                var longitude = place.geometry.viewport.b.b;
+                //latitude = Math.round(latitude * 10000) / 10000
+                //longitude = Math.round(longitude * 10000) / 10000
+                var viewpoint = '{"latitude":' + latitude +',"longitude":'+longitude+',"name":"' + name +'"}';
+                console.log(viewpoint);
+                document.getElementById('viewpoint').value = viewpoint;
+            });
+    </script>
+  <button class="btn btn-info" type="submit">Search</button>
+
+</form>
+
+<p></p>
+      <form class="form-group" action="{{ url_for('preupload') }}" method="post">
+      <button class="btn btn-info" type="submit">Upload</button>
+</form>
+
+<br />
+<br />
+
+<div class="row">
+
+    <div class="col-lg-12" style = "height:400px;overflow: auto">
+        <h4 class="text-info">Recent 20 reserved information</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col">name</th>
+                <th scope="col">who</th>
+                <th scope="col">the number of people</th>
+                <th scope="col">play time</th>
+                <th scope="col">message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mark_list in items.mark_lists %}
+                <tr>
+                <td><a href={{mark_list.url}} target="_self">{{mark_list.name}}</a></td>
+                <td class="text-success">{{mark_list.userName}}</td>
+                <td>{{mark_list.playsNumber}}</td>
+                <td class="text-danger">{{mark_list.playTime}}</td>
+                <td>{{mark_list.message}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<br />
+    <div class="col-lg-6">
+        <h4 class="text-info">Top 5 points of basketball courts</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col">name</th>
+                <th scope="col">points</th>
+                <th scope="col">the number of courts</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for point_list in items.point_lists %}
+                <tr>
+                <td><a href={{point_list.url}} target="_self">{{point_list.name}}</a></td>
+                <td>{{point_list.points}}</td>
+                <td>{{point_list.number}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<br />
+    <div class="col-lg-6">
+        <h4 class="text-info">Top 5 popular basketball courts</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col">name</th>
+                <th scope="col">points</th>
+                <th scope="col">the number of comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comments_list in items.comments_lists %}
+                <tr>
+                <td><a href={{comments_list.url}} target="_self">{{comments_list.name}}</a></td>
+                <td>{{comments_list.points}}</td>
+                <td>{{comments_list.message_numbers}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+
+
+{% endblock %}

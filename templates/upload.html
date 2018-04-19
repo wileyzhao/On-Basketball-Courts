@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Upload
+{% endblock %}
+
+ {% block main %}
+
+
+<form role="form" action="{{ url_for('upload') }}" enctype="multipart/form-data" method="post" style="text-align:left">
+    <div class="form-group">
+     <div class="form-group">
+        <label for="address" >address</label>
+        <input id ="txtPlaces" autofocus class="form-control" name="address" placeholder="address" type="text" style="width:300px; height:40px;"/>
+          <input type="hidden" name="viewpoint" id="viewpoint"/>
+
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    <script type="text/javascript">
+            var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
+            console.log(places)
+            google.maps.event.addListener(places, 'place_changed', function () {
+                var place = places.getPlace();
+                var address = place.formatted_address;
+                var name = place.name;
+                var latitude = place.geometry.viewport.f.b;
+                var longitude = place.geometry.viewport.b.b;
+                //latitude = Math.round(latitude * 10000) / 10000
+                //longitude = Math.round(longitude * 10000) / 10000
+                var viewpoint = '{"latitude":' + latitude +',"longitude":'+longitude+',"name":"' + name +'"}';
+                console.log(viewpoint);
+                document.getElementById('viewpoint').value = viewpoint;
+            });
+    </script>
+
+        </div>
+         <div class="form-group">
+        <label for="numbers" >* numbers</label>
+            <input autocomplete="off" autofocus class="form-control" id="numbers" name="numbers" placeholder="Number of courts(1-50)"  type="number" pattern="[0-9]" min="0" max="50" style="width:300px; height:40px;"/>
+          </div>
+           <div class="form-group">
+        <label for="points" >* points</label>
+
+            <input autocomplete="off" autofocus class="form-control" id="points" name="points" placeholder="points(1-10)" type="number" pattern="[0-9]" min="1" max="10" style="width:300px; height:40px;"/>
+          </div>
+           <div class="form-group">
+            <label for="pictures " >pictures</label>
+            <input type=file name=photo>
+          </div>
+           <div class="form-group">
+        <label for="message" >* message</label>
+
+            <textarea class="form-control" autocomplete="off" id="message" name="message" rows="3" style="width:300px; height:100px;" required></textarea>
+         </div>
+
+      <div class="form-group">
+        <button class="btn btn-info" type="submit">Submit</button>
+      </div>
+
+    </div>
+</form>
+
+{% endblock %}

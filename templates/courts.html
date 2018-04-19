@@ -1,0 +1,96 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    courts
+{% endblock %}
+
+{% block main %}
+
+<h3>{{item.name}}</h3>
+<p></p>
+
+<div class="row">
+ <div id="item" class="col-lg-6" style="text-align:left">
+    <h4>number of basketball courts: {{item.number}}</h4>
+    <h4>point of basketball courts: {{item.points}}</h4>
+    <h4>number of comments: {{item.message_numbers}}</h4>
+    <h4>address: {{item.address}}</h4>
+    </br>
+    <form class="form-inline" action="{{ url_for('premark') }}" method="get">
+        <input type="hidden" name="addressId" value={{item.addressId}} />
+        <button class="btn btn-info" type="submit">Mark</button>
+    </form>
+    </div>
+    </br>
+<div id="map" class="col-lg-6" style="height: 300px;width:35%;align:right;">
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: parseFloat('{{item.latitude}}'), lng: parseFloat('{{item.longitude}}')},
+          zoom: 13
+        });
+        var myLatLng = {lat: parseFloat('{{item.latitude}}'), lng: parseFloat('{{item.longitude}}')};
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: '{{item.name}}'
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ item.key | urlencode }}&callback=initMap"
+    async defer></script>
+</div>
+</div>
+
+ <div id="messages" style="text-align:left">
+    <ul class="bs">
+       {% for message in item.messages %}
+            <h4><li>
+        <div id={{message.messageId}}comment>
+        <p class="text-warning"><strong>{{message.userName}}</strong>&nbsp;{{message.createTime}}&nbsp;points:{{message.points}}&nbsp;<strong>comment</strong></p>
+<!--
+         <a href= "#" target="_self">{{message.userName}}</a>
+            <span class="time">{{message.createTime}}   points:{{message.points}}   <strong>comment</strong></span>
+            -->
+            <h5><p class="text-info"><cite title="message">{{message.message}}</cite></p></h5>
+            <div id={{message.messageId}}co style="display:none;">
+                 <img alt="picture of courts" src={{message.pic}} width="200" height="200" />
+            </div>
+            <script>
+            var pic = '{{message.pic}}';
+            if(pic.search("http://") >= 0)
+            {
+                document.getElementById('{{message.messageId}}co').style.display="block";
+            }
+            </script>
+        </div>
+        <div id={{message.messageId}}mark style="display:none;" >
+            <p class="text-success"><strong>{{message.userName}}</strong>&nbsp;the number of people:{{message.playsNumber}}&nbsp;playTime:{{message.playTime}}&nbsp;<strong>mark</strong></p>
+            <!--
+         <a href= "#" target="_self">{{message.userName}}</a>
+            <span class="time">{{message.playTime}}   playsNumber:{{message.playsNumber}}   <strong>mark</strong></span>
+            -->
+            <h5><p class="text-info"><cite title="message">{{message.message}}</cite></p></h5>
+
+        </div>
+            <script>
+                if('{{message.type}}' == 0)
+                {
+                    document.getElementById('{{message.messageId}}comment').style.display="block";
+                    document.getElementById('{{message.messageId}}mark').style.display="none";
+                }
+                else if('{{message.type}}' == 1)
+                {
+                    document.getElementById('{{message.messageId}}comment').style.display="none";
+                    document.getElementById('{{message.messageId}}mark').style.display="block";
+                }
+            </script>
+            </li></h4>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}

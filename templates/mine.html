@@ -1,0 +1,80 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Mine
+{% endblock %}
+
+ {% block main %}
+
+   <div class="font" align="left">
+
+    <h4><strong>user name: </strong>&nbsp;{{item.name}}</h4>
+    <h4><strong>user nickname:</strong>&nbsp; {{item.nickName}}</h4>
+    <h4><strong>join time: </strong>&nbsp;{{item.createTime}}</h4>
+    <h4><strong>last login Time:</strong>&nbsp; {{item.loginTime}}</h4>
+    <h4><strong>mark numbers:</strong> &nbsp;{{item.message_numbers}}</h4>
+    <br />
+    <ul class="bs">
+       {% for message in item.messages %}
+        <h4><li>
+        <div id={{message.messageId}}comment>
+            <a href={{message.url}} target="_self">{{message.name}}</a>
+            <span class="text-warning">{{message.createTime}}&nbsp;points:{{message.points}}&nbsp;<strong>comment</strong></span>
+            <h5><p class="text-info"><cite title="message">{{message.message}}</cite></p></h5>
+
+            <div id={{message.messageId}}co style="display:none;">
+                 <img alt="picture of courts" src={{message.pic}} width="200" height="200" />
+            </div>
+            <script>
+            var pic = '{{message.pic}}';
+            if(pic.search("http://") >= 0)
+            {
+                document.getElementById('{{message.messageId}}co').style.display="block";
+            }
+            </script>
+        </div>
+
+        <div id={{message.messageId}}mark style="display:none;" >
+            <a href={{message.url}} target="_self">{{message.name}}</a>  <!--href={{message.userName}} for later -->
+            <span class="text-success">the numbers of people:{{message.playsNumber}}&nbsp;playTime:{{message.playTime}}&nbsp;<strong>mark</strong></span>
+            <h5><p class="text-info"><cite title="message">{{message.message}}</cite></p></h5>
+        </div>
+        <script>
+                if('{{message.type}}' == 0)
+                {
+                    document.getElementById('{{message.messageId}}comment').style.display="block";
+                    document.getElementById('{{message.messageId}}mark').style.display="none";
+                }
+                else if('{{message.type}}' == 1)
+                {
+                    document.getElementById('{{message.messageId}}comment').style.display="none";
+                    document.getElementById('{{message.messageId}}mark').style.display="block";
+                }
+        </script>
+        </li></h4>
+        {% endfor %}
+    </ul>
+</div>
+
+<button type="button" class="btn btn-primary" data-toggle="collapse"
+    data-target="#demo">
+  change the password
+</button>
+<div id="demo" class="collapse in">
+<form action="{{ url_for('change') }}" method="post">
+        <fieldset>
+            <div class="form-group">
+                <input class="form-control" name="password" placeholder="Password" type="password"/>
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="password_1" placeholder="Password(again)" type="password"/>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-info" type="change">Change</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Mark
+{% endblock %}
+
+ {% block main %}
+
+
+<script type="text/javascript">
+
+function checkComment(){
+document.getElementById("comment").style.display="block";
+document.getElementById("mark").style.display="none"
+}
+
+function checkMark(){
+document.getElementById("comment").style.display="none";
+document.getElementById("mark").style.display="block"
+}
+
+</script>
+
+<form role="form" action="{{ url_for('mark') }}" enctype="multipart/form-data" method="post" style="text-align:left">
+    <h4>name:&nbsp;{{item.name}}</h4>
+    <h4>address:&nbsp; {{item.address}}</h4>
+    <div class="form-group">
+        <input type="hidden" name="addressId" value={{item.addressId}} />
+        <div class="col-auto">
+            <label><h4>* Choice</h4></label>
+            <label class="radio-inline"><input name="myradio" type="radio" value="0" checked="checked" onclick="checkComment()" />comment</label>
+            <label class="radio-inline"><input name="myradio" type="radio" value="1"  onclick="checkMark()"/>mark</label>
+        </div>
+        <div class="form-group">
+            <div class="form-group" id="comment">
+                        <div class="form-group">
+                            <label for="points"><h4>* points</h4></label>
+                            <input autocomplete="off" autofocus class="form-control" name="points" placeholder="points(1-10)" id="points" type="number" pattern="[0-9]" min="1" max="10" style="width:200px; height:40px;"/>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="pictures " ><h4>pictures</h4></label>
+                            <input type=file name=photo>
+                          </div>
+                </div>
+                <div class="form-group" id="mark"  style="display:none;">
+                        <div class="form-group">
+                            <label for="numbersofpeople"><h4>* numbers of people</h4></label>
+                            <input autocomplete="off" autofocus class="form-control" id="numbersofpeople" name="playsNumber" placeholder="Numbers of people(1-50)" type="number" pattern="[0-9]" min="0" max="50" style="width:200px; height:40px;"/>
+                        </div>
+                        <!--
+                        <div class="form-group">
+                            <label for="time">Time to play</label>
+                            <input autocomplete="off" class="form-control" id="time" name="playTime" placeholder="2018-01-01 13:00:00" type="text" style="width:200px; height:40px;"/>
+                        </div>
+                        -->
+                        <div class="form-group">
+                            <label for="time"><h4>* Time to play</h4></label>
+                            <input type="datetime-local" name="playTime" value="2018-01-01 13:00:00"/>
+                        </div>
+                </div>
+        </div>
+
+        <div class="form-group">
+            <label for="message"><h4>message</h4></label>
+            <textarea class="form-control" autocomplete="off" id="message" name="message" rows="3" style="width:200px; height:100px;" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-info" type="submit">Submit</button>
+        </div>
+
+    </div>
+</form>
+
+{% endblock %}
