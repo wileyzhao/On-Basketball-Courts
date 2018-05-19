@@ -32,7 +32,7 @@ Because some pages need to use google map, so you had better have a google map A
 <br>
 https://developers.google.com/maps/documentation/javascript/get-api-key?hl=zh-cn
 
-### Commonds
+### Commands
 export API_KEY="your googlemap API_KEY" <br>
 pip install --user -r requirements.txt  <br>
 flask run <br>
